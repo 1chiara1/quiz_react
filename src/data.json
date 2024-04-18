@@ -1,0 +1,28 @@
+{
+  "domande": [
+    {
+      "id": 0,
+      "domanda": "Quante zampe ha un gatto?",
+      "risposte": ["quattro", "undici", "ventisei"],
+      "corretta": "quattro"
+    },
+    {
+      "id": 1,
+      "domanda": "Dove si trova Parigi?",
+      "risposte": ["Messico", "Canada", "Francia"],
+      "corretta": "Francia"
+    },
+    {
+      "id": 2,
+      "domanda": "Di che colore è l'erba?",
+      "risposte": ["verde", "arancione", "blu"],
+      "corretta": "verde"
+    },
+    {
+      "id": 3,
+      "domanda": "Qual è il quarto mese dell'anno?",
+      "risposte": ["giugno", "agosto", "aprile"],
+      "corretta": "aprile"
+    }
+  ]
+}
