@@ -1,28 +1,42 @@
 import { useState } from "react";
+
 import data from "./data.json";
 
-// i componenti si definiscono con una funzione con prima lettera maiuscola
-//l'unico esportato è quello con export
-
-function Winner({ ansProp, fine }) {
-  if (fine === 1) {
-    if (ansProp === "4") {
-      return <p>WINNER is {ansProp}</p>;
-    } else {
-      return <p>loser</p>;
+function Winner({ fine, risposte }) {
+  var punti = 0;
+  var errori = [];
+  if (fine) {
+    for (var i = 0; i < risposte.length; i++) {
+      if (risposte[i] === data.domande[i].corretta) punti++;
+      else
+        errori.push(
+          <p>
+            la domanda {i + 1} è sbagliata, la risposta corretta è:{" "}
+            <b>{data.domande[i].corretta}</b>{" "}
+          </p>,
+        );
     }
+    return (
+      <>
+        <p> Totalizzati {punti} punti</p>
+        {errori.map((errore) => {
+          return errore;
+        })}
+      </>
+    );
   }
 }
 
-function Opzione({ daVisualizzare, statoQuiz, option }) {
+function Opzione({ daVisualizzare, statoQuiz, option, id, arrayRisp }) {
   return (
     <>
       <input
         type="radio"
+        id={id}
         value={daVisualizzare}
-        id={daVisualizzare}
         onChange={option}
-        disable={statoQuiz === 1}
+        disabled={statoQuiz === true}
+        checked={arrayRisp[id] === daVisualizzare}
       />
       <label>{daVisualizzare}</label>
       <br />
@@ -30,88 +44,92 @@ function Opzione({ daVisualizzare, statoQuiz, option }) {
   );
 }
 
-function Domanda({ id, domanda, risposte, fine, option }) {
+function Domanda({ domanda, risposte, statoQuiz, option, id, arrayRisp }) {
   return (
     <>
       <p>{domanda}</p>
-      {risposte.map((singolaRisposta) => {
+      {risposte.map((risposta, i) => {
         return (
           <Opzione
-            daVisualizzare={singolaRisposta}
-            statoQuiz={fine}
+            key={i}
+            id={id}
+            daVisualizzare={risposta}
+            statoQuiz={statoQuiz}
             option={option}
+            arrayRisp={arrayRisp}
           />
         );
       })}
-      <br />
     </>
   );
 }
 
 export default function Quiz() {
-  const [answerArray, setAnswerArray] = useState([]);
-  const [idDomanda, setDomandaId] = useState(0);
+  // UNO STATO PER LE RISPOSTE
+  const [answerArray, SetAnswer] = useState([]);
+  // UNO STATO PER CAPIRE QUALE DOMANDA VISUALIZZARE
+  const [idDomanda, setidDomanda] = useState(0);
+  // UNO STATO PER CAPIRE SE IL QUIZ è TERMINATO
   const [fine, setFine] = useState(0);
 
+  //QUESTA FUNZIONE AGGIORNA LA RISPOSTA, QUANDO VIENE CLICCATO UN RADIO BUTTON
   const onOptionChange = (e) => {
-    // potrei anche scrivere onOptionChange(e)
-    setAnswer(e.target.value);
+    const answ = answerArray.slice();
+    answ[e.target.id] = e.target.value;
+    SetAnswer(answ);
   };
 
   return (
     <>
-      {data.domande.map((singolaDomanda) => {
+      {data.domande.map((dom) => {
         return (
           <Domanda
-            id={singolaDomanda.id}
-            domanda={singolaDomanda.domanda}
-            risposte={singolaDomanda.risposte}
-            corretta={singolaDomanda.corretta}
+            id={dom.id}
+            domanda={dom.domanda}
+            risposte={dom.risposte}
+            corretta={dom.corretta}
             statoQuiz={fine}
             option={onOptionChange}
+            arrayRisp={answerArray}
           />
         );
       })}
-      <br />
-      <br />
-      //codice vecchio
-      <h3>Quante zampe ha un gatto?</h3>
+
       <input
-        type="radio"
-        value="4"
-        // checked={answer === "4"}
-        // onChange={onOptionChange}
-        disabled={fine}
-      />
-      <label>4</label>
-      <br />
-      <input
-        type="radio"
-        value="11"
-        // checked={answer === "11"}
-        // onChange={onOptionChange}
-        disabled={fine}
-      />
-      <label>11</label>
-      <br />
-      <input
-        type="radio"
-        value="26"
-        // checked={answer === "26"}
-        // onChange={onOptionChange}
-        disabled={fine}
-      />
-      <label>26</label>
-      <br />
-      <input
-        type="submit"
-        value="Risposta"
+        type="button"
+        value="Clicca qui per controllare"
         onClick={() => {
-          setFine(1);
+          setFine(true);
         }}
       />
-      {/* <p>Selected answer: {answer}</p> */}
-      {/* <Winner ansProp={answer} fine={fine} /> */}
+      <br />
+      <input
+        type="button"
+        value="AVANTI"
+        disabled={idDomanda === 2}
+        onClick={() => {
+          setidDomanda(idDomanda + 1);
+        }}
+      />
+      <input
+        type="button"
+        value="INDIETRO"
+        disabled={idDomanda === 0}
+        onClick={() => {
+          setidDomanda(idDomanda - 1);
+        }}
+      />
+
+      <p>
+        {" "}
+        Selected answer <strong>{answerArray}</strong>
+      </p>
+      <p>
+        {" "}
+        stato: <strong>{fine}</strong>
+      </p>
+
+      <Winner fine={fine} risposte={answerArray} />
     </>
   );
 }
