@@ -3,12 +3,12 @@ import { createRoot } from "react-dom/client";
 import "./styles.css";
 
 import Navbar from "./Navbar";
-import Quiz from "./Quiz";
+import Quizz from "./Quizz";
 
 const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <Navbar />
-    <Quiz />
-  </StrictMode>
+    <Quizz />
+  </StrictMode>,
 );

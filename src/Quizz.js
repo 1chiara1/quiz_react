@@ -69,7 +69,7 @@ function Domanda({ domanda, risposte, statoQuiz, option, id, arrayRisp }) {
   );
 }
 
-export default function Quiz() {
+export default function Quizz() {
   // UNO STATO PER LE RISPOSTE
   const [answerArray, SetAnswer] = useState([]);
   // UNO STATO PER CAPIRE QUALE DOMANDA VISUALIZZARE
@@ -86,19 +86,15 @@ export default function Quiz() {
 
   return (
     <>
-      {data.domande.map((dom) => {
-        return (
-          <Domanda
-            id={dom.id}
-            domanda={dom.domanda}
-            risposte={dom.risposte}
-            corretta={dom.corretta}
-            statoQuiz={fine}
-            option={onOptionChange}
-            arrayRisp={answerArray}
-          />
-        );
-      })}
+      <Domanda
+        id={idDomanda}
+        domanda={data.domande[idDomanda].domanda}
+        risposte={data.domande[idDomanda].risposte}
+        corretta={data.domande[idDomanda].corretta}
+        statoQuiz={fine}
+        option={onOptionChange}
+        arrayRisp={answerArray}
+      />
       <br />
       <input
         type="button"
@@ -111,7 +107,7 @@ export default function Quiz() {
       <input
         type="button"
         value="AVANTI"
-        disabled={idDomanda === 2}
+        disabled={idDomanda === data.domande.length - 1}
         onClick={() => {
           setidDomanda(idDomanda + 1);
         }}
