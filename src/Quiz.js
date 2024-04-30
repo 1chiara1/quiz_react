@@ -45,9 +45,12 @@ function Opzione({ daVisualizzare, statoQuiz, option, id, arrayRisp }) {
 }
 
 function Domanda({ domanda, risposte, statoQuiz, option, id, arrayRisp }) {
+  var n = id + 1;
   return (
     <>
-      <p>{domanda}</p>
+      <p>
+        {n}) {domanda}
+      </p>
       {risposte.map((risposta, i) => {
         return (
           <Opzione
@@ -81,20 +84,15 @@ export default function Quiz() {
 
   return (
     <>
-      {data.domande.map((dom) => {
-        return (
-          <Domanda
-            id={dom.id}
-            domanda={dom.domanda}
-            risposte={dom.risposte}
-            corretta={dom.corretta}
-            statoQuiz={fine}
-            option={onOptionChange}
-            arrayRisp={answerArray}
-          />
-        );
-      })}
-
+      <Domanda
+        id={data.domande[idDomanda].id}
+        domanda={data.domande[idDomanda].domanda}
+        risposte={data.domande[idDomanda].risposte}
+        corretta={data.domande[idDomanda].corretta}
+        statoQuiz={fine}
+        option={onOptionChange}
+        arrayRisp={answerArray}
+      />
       <input
         type="button"
         value="Clicca qui per controllare"
@@ -105,18 +103,18 @@ export default function Quiz() {
       <br />
       <input
         type="button"
-        value="AVANTI"
-        disabled={idDomanda === 2}
-        onClick={() => {
-          setidDomanda(idDomanda + 1);
-        }}
-      />
-      <input
-        type="button"
         value="INDIETRO"
         disabled={idDomanda === 0}
         onClick={() => {
           setidDomanda(idDomanda - 1);
+        }}
+      />
+      <input
+        type="button"
+        value="AVANTI"
+        disabled={idDomanda === data.domande.length - 1}
+        onClick={() => {
+          setidDomanda(idDomanda + 1);
         }}
       />
 
