@@ -1,0 +1,45 @@
+//numero di quiz svolti 
+
+Select count(*)
+from svolgimento_quiz
+where email='poldi@gmail.com'
+
+//numero di quiz per la quale si è passati (<2 errori) 
+
+Select count(*)
+from svolgimento_quiz
+where email='lucapa@gmail.com' and numero_errori<2;
+
+//percentuale di errori media 
+
+select email, avg((numero_errori*100)/numerodomande)
+from svolgimento_quiz join quiz on svolgimento_quiz.codquiz=quiz.codquiz
+where email='poldi@gmail.com'
+group by email
+
+//il quiz con ris migliore 
+Select codquiz
+from svolgimento_quiz
+where email = 'poldi@gmail.com' and numero_errori = (
+select min(numero_errori)
+from svolgimento_quiz
+where email='poldi@gmail.com')
+
+//il quiz con ris peggiore 
+Select codquiz
+from svolgimento_quiz
+where email = 'poldi@gmail.com' and numero_errori = (
+select max(numero_errori)
+from svolgimento_quiz
+where email='poldi@gmail.com')
+
+//l'elenco delle categorie delle domande, in ordine decrescente in base ai punteggi conseguiti
+
+select categoria, sum(esitodomanda) AS punteggio
+from domande join svolgimento_domande_quiz on domande.codquiz = svolgimento_domande_quiz.codquiz
+where email='poldi@gmail.com'
+group by categoria
+order by punteggio desc
+
+
+
